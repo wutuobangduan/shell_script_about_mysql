@@ -1,0 +1,15 @@
+#!/usr/bin/expect -f
+
+set ip [lindex $argv 0]
+set passwd [lindex $argv 1]
+spawn ssh-copy-id -i /root/.ssh/id_rsa.pub root@$ip
+expect {                    
+   "yes" {
+           send "yes\r"     
+           expect "assword" 
+           send "$passwd\r" 
+         }
+   "assword" {send "$passwd\r"}
+} 
+expect eof
+exit

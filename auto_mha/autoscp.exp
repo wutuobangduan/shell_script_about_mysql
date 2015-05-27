@@ -1,0 +1,33 @@
+#!/usr/bin/expect -f
+
+set ip [lindex $argv 0]
+set passwd [lindex $argv 1]
+spawn scp root@$ip:/mysql/mha/conf/mha.cnf /mysql/mha/conf/
+expect {                    
+   "yes" {
+           send "yes\r"     
+           expect "assword" 
+           send "$passwd\r" 
+         }
+   "assword" {send "$passwd\r"}
+} 
+spawn scp root@$ip:/mysql/mha/scripts/* /mysql/mha/scripts/
+expect {
+   "yes" {
+           send "yes\r"
+           expect "assword"
+           send "$passwd\r"
+         }
+   "assword" {send "$passwd\r"}
+} 
+#spawn scp -r root@$ip:/mysql/mha/install/*.rpm /mysql/mha/install/
+#expect {
+#   "yes" {
+#           send "yes\r"
+#           expect "assword"
+#           send "$passwd\r"
+#         }
+#   "assword" {send "$passwd\r"}
+#} 
+expect eof
+exit
